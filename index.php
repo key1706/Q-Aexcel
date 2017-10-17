@@ -1,4 +1,6 @@
-//phần header của template
+<?php include "model/DataExcel.php";
+    $reader = Reader();
+?>
 <?php include "view/header.inc.php"; ?>
 //nội dung trang
 <div class="container">
@@ -17,7 +19,7 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Panel primary</h3>
+                    <h3 class="panel-title"><?php print_r( $reader); ?></h3>
                 </div>
                 <div class="panel-body">
                     <p>Panel content</p>
@@ -46,3 +48,5 @@
         </div>
     </div>
 <?php  include_once 'view/footer.inc.php'?>
+
+

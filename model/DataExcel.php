@@ -1,32 +1,39 @@
+
 <?php
-require_once '../lib/PHPExcel.php';
+//  Include thư viện PHPExcel_IOFactory vào
+    include './lib/PHPExcel/IOFactory.php';
+    function Reader(){
 
-$filename = '../data/filexcel/example1.xls';
-$inputFileType = PHPExcel_IOFactory::identify($filename);
-$objReader = PHPExcel_IOFactory::createReader($inputFileType);
+        $inputFileName = './data/fileexcel/HCM_FR_Q&A_List.xls';
 
-$objReader->setReadDataOnly(true);
+        //  Tiến hành đọc file excel
+        try {
+            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load($inputFileName);
+        } catch(Exception $e) {
+            die('Lỗi không thể đọc file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+        }
 
-/**  Load $inputFileName to a PHPExcel Object  **/
-$objPHPExcel = $objReader->load("$filename");
+        //  Lấy thông tin cơ bản của file excel
 
-$total_sheets=$objPHPExcel->getSheetCount();
+        // Lấy sheet hiện tại
+        $sheet = $objPHPExcel->getSheet(0);
 
-$allSheetName=$objPHPExcel->getSheetNames();
-$objWorksheet  = $objPHPExcel->setActiveSheetIndex(0);
-$highestRow    = $objWorksheet->getHighestRow();
-$highestColumn = $objWorksheet->getHighestColumn();
-$highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
-$arraydata = array();
-for ($row = 2; $row <= $highestRow;++$row)
-{
-    for ($col = 0; $col <$highestColumnIndex;++$col)
-    {
-        $value=$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-        $arraydata[$row-2][$col]=$value;
+        // Lấy tổng số dòng của file, trong trường hợp này là 6 dòng
+        $highestRow = $sheet->getHighestRow();
+
+        // Lấy tổng số cột của file, trong trường hợp này là 4 dòng
+        $highestColumn = $sheet->getHighestColumn();
+
+        // Khai báo mảng $rowData chứa dữ liệu
+
+        //  Thực hiện việc lặp qua từng dòng của file, để lấy thông tin
+        for ($row = 1; $row <= $highestRow; $row++){
+            // Lấy dữ liệu từng dòng và đưa vào mảng $rowData
+            $rowData[] = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE,FALSE);
+        }
+
+        return $rowData;
     }
-}
-
-echo '<pre>';
-var_dump($arraydata);
-echo '</pre>';
+?>
