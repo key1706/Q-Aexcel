@@ -1,3 +1,12 @@
+<?php
+include "model/DataExcel.php";
+$data = Reader();
+//include_once '../model/DataExcel.php';
+if(isset($_POST['submit'])){
+    $Key_work = $_POST['key_work'];
+    $search = Search($data,$Key_work);
+}
+?>
 <html lang="en"><head>
     <meta charset="utf-8">
     <title>Fresher PHP Q&A</title>
@@ -57,11 +66,11 @@
                 </li>
             </ul>
 
-            <form class="navbar-form navbar-left" role="search">
+            <form action="index.php?p=search" class="navbar-form navbar-left" role="search" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input name="key_work" type="text" class="form-control" placeholder="Search">
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button name="submit" type="submit" class="btn btn-default">Submit</button>
             </form>
 
         </div>
